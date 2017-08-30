@@ -1,0 +1,182 @@
+\documentclass[letterpaper]{scrartcl}
+
+\usepackage{lmodern}
+\usepackage[cyr]{aeguill}
+\usepackage[english,frenchb]{babel} % le langage par défaut est le dernier de la liste, c'est-à-dire français
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{stmaryrd} 
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{csvsimple}
+\usepackage{longtable}
+\usepackage{pgffor}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{float}
+\bibliographystyle{ieeetr}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\Pset}{\mathcal{P}}
+
+\AtBeginDocument{\def\labelitemi{$\bullet$}}
+
+\author{Loïc Anthony Sarrazin-Mc Cann}
+\title{Rapport sur la comparaison de 4 stratégies d'ordonnancement dans 2 algorithmes, sur un ensemble de 53 problèmes avec 4 dérivations possibles}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Problèmes}
+L'échantillon de problèmes caractéristiques $\Pset$ utilisé est celui issu de \cite{MoWi2009}. Cet ensemble de problème a été réutilisé dans la communautée \cite{CoLed2011}, \cite{VaVi07}, ce qui justifie son utilisation comme base de problème analytique pour la comparaison d'algorithme ou de stratégies algorithmiques.\\
+L'ensemble de problème est issu initialement de 22 fonctions non linéaire des moindres carrés tirés de la collection $\mathrm{CUTEr}$ \cite{GoOrTo03}. L'indice $k_p$ pour un problème $p \in \mathcal{P}$ fait référence à la fonction de base issue de $\mathrm{CUTEr}$ utilisée pour ce problème.\\
+Chaque problème possède trois autres paramètres en plus de leur $k_p$ correspondant, soient $n_p$ pour la dimension du problème, $m_p$ de nombre de composantes du problème et le paramètre binaire $x_p$, pour lequel, si activé, le point de départ $x_s$ subit une homotéthie de facteur 10. L'ensemble $\Pset$ contient 53 problèmes avec un vecteur $ (k_p,n_p,m_p,s_p) $ unique. Aucune fonction sous-jacente n'est surreprésentée puisque au plus six problèmes possèdent le même $x_p$. Les bornes sur les paramètres vont telles que 
+\begin{equation*}
+1 \leq x_p \leq 22,\ \ 2 \leq n_p \leq 12,\ \ 2\leq m_p\leq 65,\ \ s_p \in \{0,1\},\ \ p=1,\dots,53
+\end{equation*}
+avec $n_p \leq m_p$.\\
+La structure par morceaux des problèmes de $\Pset$ permet de dériver l'ensemble en d'autres classes de problèmes. On entend ainsi permettre la comparaison d'algorithmes ou de stratégies algorithmiques sur différentes classes de problèmes. Les classes utilisées dans \cite{MoWi2009} qui sont réutilisées ici sont : les problèmes lisses, les problèmes lisses définis par partie et les problèmes bruités. Les problèmes lisses sont formés tels que : 
+\begin{gather*}
+	f(x)=\sum_{i=1}^{m}{\left(f_i(x)\right)}^2
+\end{gather*}
+Les problèmes bruités sont obtenus en ajoutant un terme induisant un bruit à la fonction , tel que : 
+\begin{gather*}
+	f(x)=(1+\epsilon_{f}\theta(x))\sum_{k=1}^{m}{f_{i}(x)^{2}}
+\end{gather*}
+Le terme $theta(x)$ est issu d'une composition d'une fonction trigonométrique $\theta_0(x)$ avec un polynôme de Chebyshev de degré 3 tel que $T_{3}(\alpha) = \alpha(4\alpha^{2}-3)$
+ \begin{gather*}
+ 	\theta_0(x)=0.9\sin(100||x||_{1})\cos(100||x||_\infty)+0.1\cos(||x||_2) \\
+	\theta(x) = T_3(\theta_0(x)) = T_{3}(0.9\sin(100||x||_{1})\cos(100||x||_\infty)+0.1\cos(||x||_2))
+\end{gather*} 
+ Cette composition élimine la périodicité de $\theta_{0}$ et ainsi que du terme $e_f$, le bruit relatif.  
+\section{Outils mathématiques}
+\subsection{Modèles Quadratriques pour l'ordonnancement}
+L'ordonnancement guidé par les modèles qui utilise les modèles quadratiques élaborés dans \cite{CoLed2011} est possible avec les algorithmes présent dans NOMAD, tels que CS, GPS et MADS. Pour obtenir un modèle, on considère la base naturelle de l'espace des polynômes de degré deux et moins. 
+\begin{equation*}
+\phi (x)=(\phi_0(x),\phi_1(x),...,\phi_q(x)) = \left(1,x_1,x_2,...,x_n,\frac{x_1^2}{2},\frac{x_2^2}{2},...,\frac{x_n^2}{2},x_1 x_2, x_1 x_3,...,x_{n-1},x_{n}\right)^T
+\end{equation*}
+Cette base possède $q+1 = (n+1)(n+2)/2$ éléments. Le modèle $m_f$ de la fonction $f$ est tel que $\tilde{f}(x)=\alpha^T\phi(x)$, $\alpha \in \R^{q+1}$. Pour obtenir ce modèle, un ensemble de point $Y=\{y^0,y^1,...,y^p\}$ ayant $p+1$ éléments est nécessaire. On cherche alors a minimiser la différence entre les valeurs de la boîte noire évalués aux points de $Y$ et celles du modèle, de façon à minimiser le terme $\underset{y\in Y}{\sum}{(f(y)-\tilde{f}(y))^2}$. Au long de l'exécution présente ou de celles passées enregistrées dans les caches, les algorithmes évalueront la boîte noire à différents points, parmis lesquels pouront être choisis les $p = q$ points nécessaires à l'élaboration du modèle. Les points devront satisfaire la propriété qui valide le modèle : 
+\begin{gather*}
+	M(\phi,Y)\alpha = f(Y)\\
+	f(y)=(f(y^0,f(y^1),...,f(y^p))^T\\
+	M(\phi,Y) = 
+	\begin{bmatrix}
+	\phi_0(y^0) & \phi_1(y^0) & \dots & \phi_q(y^0)\\
+	\phi_0(y^1) & \phi_1(y^1) & \dots & \phi_q(y^1)\\
+	\vdots & \vdots & \vdots & \vdots\\
+	\phi_0(y^p) & \phi_1(y^p) & \dots & \phi_q(y^p)\\
+	\end{bmatrix}
+\end{gather*}
+Ce systeme peut être résolu seulement si $p=q$ et que la matrice soit de rang pleine. Dans le cas où $p\geq q$, on tentera de résoudre le problème de minimisation suivant : 
+\begin{equation*}
+\begin{aligned}
+& \underset{\alpha \in \R}{\text{min}}
+& & \norm{M(\phi,Y)\alpha -f(Y)}^2
+\end{aligned}
+\end{equation*}
+Dans le cas où $p<q$, on minimisera le même problême mais en régularisant le problème à l'aide d'une interpolation dans le sense de la norme de Frobenius minimale. \cite{MoWi2009} \cite{CuRoVi10}. La norme de Frobenius pour une matrice $A$ est définie telle que : 
+\begin{equation*}
+	\norm{A}_F = \sqrt{\overset{m}{\underset{i=1}{\sum}} \overset{n}{\underset{j=1}{\sum}}|a_{i,j}|}
+\end{equation*}
+Depuis \cite{GoVL1996}.
+Il est possible de réarranger $\tilde{f}(x)$ de façon à l'illustrer comme une fonction quadratique en utilisant la notation précédente mais en divisant le modèle en ses expressions linéaires et quadratiques : 
+\begin{equation*}
+\tilde{f}(x) = \alpha_{L}^{T}\phi_L(x) + \alpha_{Q}^{T}\phi_Q(x)
+\end{equation*}
+L'indice $L$ dénote les termes linéaires et d'ordre 0 de $\phi(x)$, au compte de $n+1$, soient les $n$ variables et le terme de degré 0, $\phi_0(x)=1$. L'indice $Q$ dénote les termes quadratiques au compte de $(n+1)(n+2)/2 - (n+1) = n(n+1)$. Ainsi, on peut réecrire la quadratique en trois termes, soient le terme constant, le terme des composantes linéaires et le terme des composantes quadratiques : 
+\begin{equation*}
+\tilde{f}(x) = c + g^T x + \frac{1}{2} x^T H x
+\end{equation*}
+Avec $g \in \R^n$ et la matrice $H\in \R^{n,n}$ la matrice Hessienne symétrique du modèle. Avec un problème sous déterminé où $p<q$, on choisira le modèle tel que :
+\begin{align*}
+	&\underset{H \in \R^{n,n}}{\text{min}}& &\norm{H}^2_H & &\\
+	&\text{sujet à} & &c + g^T y^i + \frac{1}{2} (y^i)^T H (y^i) = f(y^i) & &i = 1,\dots, p
+\end{align*}
+On entend ici minimiser l'influence des termes quadratiques pour diminuer l'amplitude du modèle entre les points de $Y$ utilisés. Par exemple, pour un problème de dimension $n$ avec $p\leq(n+1)$, on résoudera seulement la portion linéaire de $\alpha ^T \phi(y^i) = f(y^i)$ pour ainsi laisser $h_{i,j}=0, i,j=1\dots n$ et donc $\alpha_{Q}=0$.
+\section{Stratégies}
+Les deux algorithmes utilisés sont GPS et MADS. Les définitions des stratégies ainsi que quelques notions les entourant :
+\subsection{Stratégie Opportuniste}
+\textbf{La stratégie opportuniste} : À l'itéré courant $x^{k}$ de la sonde, pour un point $p_i$ appartenant à un ensemble de points candidats $P^k$, si $f(p_i)\ < \ f(x^k)$, alors $x^{k+t}\ \leftarrow \ p_i$ sans que les autres points de l'ensemble ordonné de points candidats $P^k$ soient évalués. L'absence d'opportunisme implique que $f(p_i)$ doit être évaluée pour chaque $p_i \ \in \ P^k$. 
+\subsection{Ordonnancement}
+\textbf{Ordonnnancement} : Pour chaque itéré $x^k$, un ensemble de points candidats $P^k$ est généré en fonction des spécificités de l'algorithme et des paramètres de l'utilisateur. Lorsqu'on réfère à l'ordonnancement, on réfère à l'ordre dans lequel ces points sont évalués dans une itération de l'étape de sonde. 
+\subsection{Stratégies d'ordonnancement}
+\textbf{Stratégie d'ordonnancement} : L'ordonancement des points de $P^k$ est sujette à variation. On identifie ici quelques méthodes d'ordonnancement qui permettent de comparer les points les uns avec les autres et de les classer en conséquence. On dit que $p_i \prec p_j$ si $p_i$ doit être évalué avant $p_j$. Cette dominance est définie par la stratégie d'ordonnancement utilisée. Il n'y a aucun besoin pour une stratégie d'ordonnancement si on n'utilise pas la stratégie opportuniste puisque tous les points de l'ensemble $P^k$ seront évalués avant de définir le prochain itéré $x^k$. \\\\
+
+\indent \textbf{Ordonnancement lexicographique} : L'ordonnancement lexicographique est une stratégie d'ordonnancement déterministe qui consiste à classer les points selon leurs coordonnées. Un point $p_i(x_{i,1},x_{i,2}...x_{i,n}) \ \prec \ p_j(x_{j,1},x_{j,2}...x_{j,n})$ si $x_{i,1}\ <\ x_{j,1}$. Dans le cas où $x_{i,1}\ =\ x_{j,1}$, alors c'est le test $x_{i,2}\ <\ x_{j,2}$ qui déterminera quel point est dominant. Si il y a encore égalité, ce sera la troisième coordonnée et ainsi de suite. La stratégie se nomme ainsi car elle immite l'ordonnancement des mots dans un dictionnaire.\\\\
+
+\indent \textbf{Ordonnancement en fonction du dernier succès} : Pour une étape de sonde opportuniste à l'itéré courant $x^k$, si un point $p_i$ améliore la solution tel que $f(p_i)\ <\ f(x^k)$ et que $p_i$ est réalisable, alors $x^{k+t}\ \leftarrow \ p_i$. Dans ce contexte, on considère que l'itération est un succès. On peut alors identifier la direction associé au point $p_i$ qu'on nommera $d_{i,k}$. \\\\
+\indent Le nouvel itéré $x^{k+1}$ implique la génération d'un nouvel ensemble de points candidat $P^{k+1}$. Dans ce nouvel ensemble, on ordonnera les points de façon à ce que l'angle entre les directions correspondentes à ces points et la direction du dernier succès obtenue $d_{i,k}$ soit minimale. On peut généraliser ceci avec le produit scalaire de la façon suivante : 
+\begin{equation}
+\frac{d_{i,k}\cdot d_{i,k-1}}{||d_{i,k-1}||||{d_{i,k}||}} > \frac{d_{j,k}\cdot d_{k-1}}{||d_{k-1}||||{d_{j,k}||}}  \implies d_{i,k} \prec d_{j,k}  
+\end{equation}
+Dans le cas ou aucun point n'améliore l'itéré courant et que un nouvel ensemble $P_k$ est généré, la direction du dernier succès reste la direction associée au point courant depuis son prédécesseur. En d'autre mot, pour une sonde non fructueuse, la direction du dernier succès ne se voit pas altérée. Dans le cas ou aucun point dit succès ne précede l'itéré courant, par exemple à l'itération $k=0$, on utilise une stratégie d'ordonnancement déterministe.
+\\\\
+\textbf{Ordonnancement en fonction du modèle} : À l'itéré courant $x^k$ et son ensemble de points candidats correspondant $P^k$ donné, avant d'évaluer $f(p_i), \ p_i \ \in P^k$, on évalue $\tilde{f}(p_i) \ \forall \ p_i \in P^k$, soit la valeur du modèle quadratique de la boîte noire à chaque point de l'ensemble de candidats. Les points sont ensuite ordonnés de façon à privilégier ceux qui minimisent le plus possible le modèle quadratique. 
+\begin{equation}
+\tilde{f}(p_i) < \tilde{f}(p_j) \implies p_i \prec p_j
+\end{equation}
+Dans le cas ou aucun modèle n'est disponible, par exemple à l'itération $k=0$, on utilise une stratégie d'ordonnancement déterministe.
+\section{Outils de comparaison}
+Les outils de comparaison utilisés sont les profils de performance et les profils de données.
+\\\\
+\textbf{Test de convergence} : Le test de convergence utilisé pour les profils de performance est le suivant : 
+\begin{equation}
+f(x_0) - f(x) \geq (1-\tau)(f(x_0)-f_L)\\
+\end{equation} 
+Avec $x_0$ la solution initiale, $\tau$ le taux de convergence désiré et $f_L$ la meilleure valeur obtenue pour le problème par toutes les stratégies.\\
+Les valeurs de 0.1, 0.01 et 0.001 sont utilisées pour les différents profils.\clearpage
+\section{Comparaison}
+\subsection{GPS}
+
+	\begin{figure}[h]
+	\includegraphics[width=3in]{perf2_g_01.png}
+	\includegraphics[width=3in]{perf2_g_001.png}
+	\end{figure}
+	\begin{figure}[h]
+		\includegraphics[width=3in]{perf2_g_0001.png}
+		\centering
+	\end{figure}
+\FloatBarrier
+Les profils de performance révèlent qu'il n'y a pas de hierarchie claire entre les trois stratégies utilisées avec l'opportunisme. Cependant, on y observe tout de même que la stratégie utilisant les modèles semble mieux performer sur l'éventail de problème ici présent. Le seul aspect à retenir est que l'absence de stratégie opportuniste n'est pas recommendée pour ces trois problèmes. 
+	\begin{figure}[h]
+	\includegraphics[width=3in]{data2_g_01.png}
+	\includegraphics[width=3in]{data2_g_001.png}\\
+	\end{figure}
+	\begin{figure}[h]
+		\includegraphics[width=3in]{data2_g_0001.png}
+		\centering
+	\end{figure}
+\FloatBarrier
+	On peut déduire de ces profils de données que l'absence de stratégie opportuniste ralenti un peu la résolution des problèmes. Autrement, aucune stratégie ne se démarque.
+	\newpage
+\subsection{MADS}
+	\begin{figure}[h]
+	\includegraphics[width=3in]{perf2_m_01.png}
+	\includegraphics[width=3in]{perf2_m_001.png}
+\end{figure}
+\begin{figure}[h]
+	\includegraphics[width=3in]{perf2_m_0001.png}
+	\centering
+\end{figure}
+\FloatBarrier
+Avec MADS, on remarque une hierarchie plus flagrante entre la performance des stratégie sur ces problèmes. Puisque la stratégie d'ordonnancement avec la dernière direction de succès est moins performante que la stratégie lexicographique, on peut se demander si il est pertinent de l'utiliser en accord avec MADS. De plus, on remarque que la stratégie d'ordonnancement avec modèles semble plus fiable.
+\begin{figure}[h]
+	\includegraphics[width=3in]{data2_m_01.png}
+	\includegraphics[width=3in]{data2_m_001.png}\\
+\end{figure}
+\begin{figure}[h]
+	\includegraphics[width=3in]{data2_m_0001.png}
+	\centering
+\end{figure}
+\FloatBarrier
+Les profils de données ne sont pas très révélateurs. Ceci est en partie du au nombre d'evaluation maximal des boîtes noires, qui reste fixé à 100 indépendemment de la dimension du problème. 
+
+\bibliographystyle{plain}
+\bibliography{bibliography}
+%\pdfbookmark[1]{References}{sec-refs}
+\end{document} 
