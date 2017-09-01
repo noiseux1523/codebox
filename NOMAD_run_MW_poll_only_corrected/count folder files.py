@@ -14,6 +14,6 @@ for i in os.listdir('.'):
             DIR2 = DIR1 + '/' + k
             ab=os.listdir(DIR2)
             if (len([j for j in os.listdir(DIR2) if os.path.isfile(os.path.join(DIR2, j))])) == 40:
-                print DIR2
+                print DIR2 + " does not have 40 files, they have " + str(len([j for j in os.listdir(DIR2) if os.path.isfile(os.path.join(DIR2, j))]))
 
         #print str(i) + " is a directory with " + str(len([j for j in os.listdir('./'+i) if os.path.isdir(os.path.join(DIR,j))]))
