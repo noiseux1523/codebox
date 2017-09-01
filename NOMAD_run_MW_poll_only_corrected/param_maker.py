@@ -36,8 +36,9 @@ make_directories = True
 generate_bbcpp = True
 generate_nesgtcpp = True
 generate_x0files = True
-if generate_x0files = True:
-	call(['g++ generate_x0.cpp -o generate_x0.exe'], shell = True)
+if generate_x0files == True:
+    argument = shlex.split("g++ generate_x0.cpp -o generate_x0.exe")
+    subprocess.Popen(argument)
 generate_paramfiles = True
 compile_bbcpp = True
 compile_omsgt = True

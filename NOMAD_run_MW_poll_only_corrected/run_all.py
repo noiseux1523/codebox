@@ -7,12 +7,12 @@ def execute(s):
     return
 
 seeds = [str(x+1) for x in xrange(10)]
-instances = [str(x+1) for x in xrange(53)]
+instances = [str(x+1) for x in xrange(2)]
 types = ['SMOOTH','NONDIFF','WILD3','NOISY3']
 algos = {'c':'CS'} #on roule juste CS avec le mesh de 0
 #algos = {'c':'CS','g':'GPS','m':'MADS'}
-strategies = ['or'] #reroule uniquement avec surrogate random
-#strategies = ['n','ol','os','om','or','oo','0n']
+#strategies = ['or'] #reroule uniquement avec surrogate random
+strategies = ['n','ol','os','om','or','oo','0n']
 if 'or' in strategies:
 	call(['chmod +x rdsgt.py'], shell = True)
 total=strategies.__len__()*algos.__len__()*seeds.__len__()*instances.__len__()*types.__len__()
