@@ -10,7 +10,8 @@ def execute(s):
 seeds = [str(x+1) for x in xrange(10)]
 instances = [str(x+1) for x in xrange(53)]
 types = ['SMOOTH','NONDIFF','WILD3','NOISY3']
-algos = {'c':'CS','g':'GPS','m':'MADS'}
+#algos = {'c':'CS','g':'GPS','m':'MADS'}
+algos = {'m':'MADS'}
 strategies = ['n','ol','os','om','or','oo','0n']
 total=strategies.__len__()*algos.__len__()*seeds.__len__()*instances.__len__()*types.__len__()
 param_files = []
