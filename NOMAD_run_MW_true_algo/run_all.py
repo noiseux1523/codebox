@@ -13,6 +13,8 @@ types = ['SMOOTH','NONDIFF','WILD3','NOISY3']
 #algos = {'c':'CS','g':'GPS','m':'MADS'}
 algos = {'m':'MADS'}
 strategies = ['n','ol','os','om','or','oo','0n']
+if 'or' in strategies:
+	call(['chmod +x rdsgt.py'], shell = True)
 total=strategies.__len__()*algos.__len__()*seeds.__len__()*instances.__len__()*types.__len__()
 param_files = []
 
