@@ -36,6 +36,8 @@ make_directories = True
 generate_bbcpp = True
 generate_nesgtcpp = True
 generate_x0files = True
+if generate_x0files = True:
+	call(['g++ generate_x0.cpp -o generate_x0.exe'], shell = True)
 generate_paramfiles = True
 compile_bbcpp = True
 compile_omsgt = True
@@ -195,6 +197,7 @@ for type in prob_type_list:
             thefile.close()
 
         if generate_x0files:
+
             generation = "./generate_x0.exe " + str(instance.value)
             args = shlex.split(generation)
             result = subprocess.Popen(args,stdout=subprocess.PIPE).communicate()[0][:-2]
@@ -207,7 +210,8 @@ for type in prob_type_list:
 
         if generate_paramfiles:
             seeds = ['1','2','3','4','5','6','7','8','9','10']
-            algo_types = {'c':'CS','g':'GPS','m' : 'MADS'}
+            algo_types = {'c':'CS'}
+            #algo_types = {'c':'CS','g':'GPS','m' : 'MADS'}
             ordering_strategies = ['n','ol','os','om','or','oo','0n']
             with open("param.txt", 'r') as file:
                 # Ouvrir le param.txt

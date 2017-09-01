@@ -47,9 +47,9 @@ with open('OO','r') as file:
     settings['OO'] = OO
     file.close()
 
-with open('ON','r') as file:
+with open('0N','r') as file:
     ON=file.readlines()
-    settings['ON'] = ON
+    settings['0N'] = ON
     file.close()
 
 
