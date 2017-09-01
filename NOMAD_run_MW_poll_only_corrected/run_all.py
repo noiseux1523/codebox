@@ -6,12 +6,15 @@ def execute(s):
     call(['$NOMAD_HOME/bin/nomad ' + s], shell=True)
     return
 
-
 seeds = [str(x+1) for x in xrange(10)]
 instances = [str(x+1) for x in xrange(53)]
 types = ['SMOOTH','NONDIFF','WILD3','NOISY3']
-algos = {'c':'CS','g':'GPS','m':'MADS'}
-strategies = ['n','ol','os','om','or','oo','0n']
+algos = {'c':'CS'} #on roule juste CS avec le mesh de 0
+#algos = {'c':'CS','g':'GPS','m':'MADS'}
+strategies = ['or'] #reroule uniquement avec surrogate random
+#strategies = ['n','ol','os','om','or','oo','0n']
+if 'or' in strategies:
+	call(['chmod +x rdsgt.py'], shell = True)
 total=strategies.__len__()*algos.__len__()*seeds.__len__()*instances.__len__()*types.__len__()
 param_files = []
 
