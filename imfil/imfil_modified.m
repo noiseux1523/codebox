@@ -1863,6 +1863,8 @@ end
 pnew=sum(newindex);
 fp1=[];
 iflag=[];
+% Ordering here, loic
+% xp = ordo1(xp);
 if parallel == 0
     for i=1:pnew
         [fpx,iflagx,ict]=feval(f,xp(:,i),h,core_data);
@@ -1875,7 +1877,7 @@ if parallel == 0
             newindex=newindex(:,1:end-remove_pts);
             iflago=iflago(:,1:end-remove_pts);
             pold=pold-remove_pts;
-            break
+            break %% LOIC ICI
         end
     end
 else
@@ -2192,3 +2194,4 @@ if m_vec > 0
       disp(' The initial iterate is infeasible. x must satisfy the bound constraints.');
    end
 end
+
