@@ -1,4 +1,4 @@
-function[out]=ol(in)
+function[out]=iol(in)
     %This is lexicographic ordering
     [l n] = size(in); % l = longueur du vecteur point, n = quantite de vecteurs points
     %moved{1:amount}=0

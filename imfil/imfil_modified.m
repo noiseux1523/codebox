@@ -1864,7 +1864,7 @@ pnew=sum(newindex);
 fp1=[];
 iflag=[];
 % Ordering here, loic
-% xp = ordo1(xp);
+% xp = ordo1(xp,);
 if parallel == 0
     for i=1:pnew
         [fpx,iflagx,ict]=feval(f,xp(:,i),h,core_data);
