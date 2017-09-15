@@ -29,5 +29,4 @@ for i = 1 : size(in,2)
 end
 [~,idx] = sort(cosses);
 out = in(:,fliplr(idx));
-flag=1;
 end

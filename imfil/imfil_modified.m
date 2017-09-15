@@ -1864,7 +1864,23 @@ pnew=sum(newindex);
 fp1=[];
 iflag=[];
 % Ordering here, loic
-% xp = ordo1(xp,);
+% Avec ordonnancement aléatoire
+% xp = ior(xp);
+
+% Avec ordonnancement lexicographique
+% xp = iol(xp);
+
+% Avec ordonnancement par stratégie du dernier succès
+% xp = ios(xp,x,complete_history);
+
+% Avec ordonnancement omniscient
+% xp = ioo(xp,'f_easy');
+
+% Avec ordonnancement negatif omniscient
+% xp = ion(xp,'f_easy');
+
+% Avec ordonnancement avec modèle
+ xp = iom(xp,x,complete_history);
 if parallel == 0
     for i=1:pnew
         [fpx,iflagx,ict]=feval(f,xp(:,i),h,core_data);
