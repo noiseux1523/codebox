@@ -1,10 +1,17 @@
 function[out]=iom(in,x,complete_history)
 
-pts = complete_history.good_points;
-values = complete_history.good_values;
+%Change le nom des variables compliquées et update les nombres necessaires
+%a la construction du modele
+% Il ne faut pas avoir deux fois le meme pt dans l'history. WTF imfil?
+
+pts = complete_history.good_points';
+[pts,subvector,~] = unique(pts,'rows');
+pts = pts';
+values = complete_history.good_values';
+values = values(subvector)';
 n= size(pts(:,1),1); %n le nombre de variables
 q = (n+1)*(n+2)/2; % pour la base naturelle, q = nb de points pour le model
-p = size(complete_history.good_points,2); % nombre de points dans la history
+p = size(pts,2); % nombre de points dans la history
 
 % Cas ou il n'y a meme pas assez de points pour faire juste une
 % approximation linéaire... comme dans nomad
@@ -34,6 +41,7 @@ if p >= q
     mat = ones(q,q);
     matL = ones(q,n+1);
     matQ = ones(q,(n*(n+1)/2));
+    p=q;
 end
 
 nb_term_mix = (n+1)*(n+2)/2-1-2*n;
@@ -73,48 +81,45 @@ F = [matQ*matQ' matL;matL' zeros(size(matL',1),size(matL,2))];
 
 
 % Si la matrice est singuliere on ordonne jamais
-if abs(det(F))>0.0001
-    mualphaL = linsolve(F,[values';zeros(n+1,1)]);
-    mu = mualphaL(1:q);
-    alphaL = mualphaL(q+1:end);
+% if abs(det(F))>0.0001
+mualphaL = linsolve(F,[values';zeros(n+1,1)]);
+mu = mualphaL(1:p);
+alphaL = mualphaL(p+1:end);
 
-    alphaQ = matQ'*mu;
-    alpha = [alphaL;alphaQ];
+alphaQ = matQ'*mu;
+alpha = [alphaL;alphaQ];
 
-    % Construction de phi des points en entré
-    x_size = size(in,2);
-    phi_x = ones(q,x_size);
-    for j = 1 : x_size;
-        for i = 1 : n
-            phi_x(i+1,j) = in(i,j);
-            phi_x(i+n+1,j) = in(i,j).^2' / 2;
-        end
-        for i = 1 : nb_term_mix
-            phi_x(i+2*n+1,j) = in(mat_tm(1,i),j) .* in(mat_tm(2,i),j);
-        end
+% Construction de phi des points en entré
+x_size = size(in,2);
+phi_x = ones(q,x_size);
+for j = 1 : x_size;
+    for i = 1 : n
+        phi_x(i+1,j) = in(i,j);
+        phi_x(i+n+1,j) = in(i,j).^2' / 2;
     end
-
-    % On resouds le systeme
-    mf_x = alpha'*phi_x;
-
-    % % Trace un graphe pour voir
-    %x = linspace(0,10);
-    %y = linspace(0,10);
-    %[X,Y] = meshgrid(x,y);
-
-    %for i = 1 : 100
-    %    for j = 1 : 100
-    %        Z(i,j) = alpha'*phi([X(i,j);Y(i,j)]);
-    %    end
-    %end
-
-
-    % On ordonne
-    [~,idx2]=sort(mf_x);
-    out = in(:,idx2);
-    
-    else
-    out = in;
+    for i = 1 : nb_term_mix
+        phi_x(i+2*n+1,j) = in(mat_tm(1,i),j) .* in(mat_tm(2,i),j);
+    end
 end
+
+% On resouds le systeme
+mf_x = alpha'*phi_x;
+
+% % Trace un graphe pour voir
+%x = linspace(0,10);
+%y = linspace(0,10);
+%[X,Y] = meshgrid(x,y);
+
+%for i = 1 : 100
+%    for j = 1 : 100
+%        Z(i,j) = alpha'*phi([X(i,j);Y(i,j)]);
+%    end
+%end
+
+
+% On ordonne
+[~,idx2]=sort(mf_x);
+out = in(:,idx2);
+
 
 end

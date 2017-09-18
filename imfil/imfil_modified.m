@@ -1864,23 +1864,29 @@ pnew=sum(newindex);
 fp1=[];
 iflag=[];
 % Ordering here, loic
-% Avec ordonnancement aléatoire
-% xp = ior(xp);
 
-% Avec ordonnancement lexicographique
-% xp = iol(xp);
-
-% Avec ordonnancement par stratégie du dernier succès
-% xp = ios(xp,x,complete_history);
-
-% Avec ordonnancement omniscient
-% xp = ioo(xp,'f_easy');
-
-% Avec ordonnancement negatif omniscient
-% xp = ion(xp,'f_easy');
-
-% Avec ordonnancement avec modèle
- xp = iom(xp,x,complete_history);
+global ordo
+switch ordo
+    case 'r'
+        % Avec ordonnancement aléatoire
+        xp = ior(xp);
+    case 'l'
+        % Avec ordonnancement lexicographique
+        xp = iol(xp);
+    case 's'
+        % Avec ordonnancement par stratégie du dernier succès
+        xp = ios(xp,x,complete_history);
+    case 'm'
+        % Avec ordonnancement omniscient
+        xp = ioo(xp,'f_easy');
+    case 'o'
+        % Avec ordonnancement negatif omniscient
+        xp = ion(xp,'f_easy');
+    case 'n'
+        % Avec ordonnancement avec modèle
+        xp = iom(xp,x,complete_history);
+end
+ 
 if parallel == 0
     for i=1:pnew
         [fpx,iflagx,ict]=feval(f,xp(:,i),h,core_data);

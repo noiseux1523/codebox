@@ -1,10 +1,11 @@
-function [x,histout,comp]=driver_easy_modified;
+function [x,histout,comp]=driver_easy_modified
 % DRIVER_EASY
 % Minimize f_easy with imfil.m
 %
 % function [x,histout,complete_history]=driver_easy;
 %
-
+global ordo
+ordo = 'r';
 %
 % Set the bounds, budget, and initial iterate.
 bounds=[-1, 1; -1 1];
