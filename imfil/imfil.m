@@ -268,6 +268,8 @@ switch func_type
    otherwise
      disp('internal error in imfil.m: f_internal');
 end
+flof=1;
+
 [mf,nf]=size(fx);
 %
 % If this is the first time you evalute f and if imfil_fscale < 0,

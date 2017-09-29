@@ -10,10 +10,10 @@ strategy = 'om'
 #Initialisation d'un array 2d numpy qui aura une ligne par combo
 Table = []
 # On itere sur toutes les combinaisons type / instance , ouvre le fichier et sort le pt initial et la sortie
-for type in types:
-    for instance in instances:
-        foldername = 'resultats' + '\\' + instance + '_' + type + '\\' + algo + strategy
-        historyfile = instance + '_' + type + '_history_' + seed + '_' + algo + strategy + '.' + seed + '.txt'
+for instance in instances:
+    for type in types:
+        foldername =  instance + '_' + type + '\\' + algo + strategy +'\\'
+        historyfile = foldername + instance + '_' + type + '_history_' + seed + '_' + algo + strategy + '.' + seed + '.txt'
 
         #Ici on ouvre le fichier
         with open(historyfile, 'r') as file:
@@ -21,18 +21,17 @@ for type in types:
             file.close()
 
         # Prends la premiere ligne
-        line_1=iniFile[1]
+        line_1=iniFile[0]
 
         # Prends la derniere ligne
         line_end = iniFile[-1]
 
         #Splitter les lignes pour exclure les valeurs de la fonction, qui sont inutiles ici, et les avoirs en array
-        list_1 = list(map(float, (line_1).split()))[1:-2]
-        list_end = list(map(float, (line_end).split()))[1:-2]
+        list_1 = list(map(float, (line_1).split()))[0:-1]
+        list_end = list(map(float, (line_end).split()))[0:-1]
 
         # La ligne qu'on ajoute a l'array
-        line_2_append = list_1
-        line_2_append.append(list_end)
+        line_2_append = list_1 + list_end
         line_2_append.insert(0,instance)
         line_2_append.insert(1, type)
 
@@ -40,9 +39,10 @@ for type in types:
         Table.append(line_2_append)
 
 # Ouvre le fichier des bounds quon va creer
-with open('imfil_bounds.csv','wb') as myfile:
+with open('imfil_bounds.txt','w') as myfile:
     for obj in Table:
-        for obj2 in Table[obj]:
-            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-            wr.writerow(obj2)
+        for obj2 in obj:
+            #obj2.strip('"')
+            myfile.write(str(obj2) + ' ')
+        myfile.write('\n')
     myfile.close()

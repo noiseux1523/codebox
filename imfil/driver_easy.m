@@ -13,7 +13,7 @@ x0=[.5,.5]';
 %
 % Call imfil.
 %
-[x,histout,comp]=imfil(x0,'f_easy',budget,bounds);
+[x,histout,comp]=imfil(x0,'f_easy',budget,bounds,imfil_optset());
 %
 % Use the first two columns of the histout array to examine the
 % progress of the iteration.
