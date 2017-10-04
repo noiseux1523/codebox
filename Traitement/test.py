@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
-import classes.History as History
-import classes.HistorySet as HistorySet
+import History as History
+import HistorySet as HistorySet
 import numpy as npy
-import classes.nomadFonctions as NOMAD
+import nomadFonctions as NOMAD
 import pickle
 import subprocess
 import tousFonctions as fct
@@ -182,8 +182,6 @@ def test4():
     types = ['SMOOTH', 'NONDIFF', 'WILD3', 'NOISY3']
     algos = {'g': 'GPS', 'm': 'MADS'}
     strategies = ['n', 'ol', 'os', 'om']
-    i = 0
-    set = HistorySet.HistorySet()
     for algo in algos:
         for type in types:
             set = HistorySet.HistorySet()
@@ -207,8 +205,8 @@ def test5():
     seeds = [str(x + 1) for x in range(10)]
     instances = [str(x + 1) for x in range(53)]
     types = ['SMOOTH', 'NONDIFF', 'WILD3', 'NOISY3']
-    algos = {'g': 'GPS', 'm': 'MADS'}
-    strategies = ['n', 'ol', 'os', 'om']
+    algos = {'c':'CS','g': 'GPS', 'm': 'MADS'}
+    strategies = ['n', 'ol', 'os', 'om','or','oo','on']
 
     #Pre traitement des history en enlevant les non succes (on aurait pu prendre stats)
     for algo in algos:
@@ -271,7 +269,66 @@ def test7():
         testSet2 = pickle.load(f)
         f.close()
     testSet2.plotData(ratio)
-
     return
-test6()
 
+def test8():
+    # Vecteurs necessaires pour traiter les données
+    seeds = [str(x + 1) for x in range(10)]
+    instances = [str(x + 1) for x in range(53)]
+    types = ['SMOOTH', 'NONDIFF', 'WILD3', 'NOISY3']
+    algos = {'c':'CS','g': 'GPS', 'm': 'MADS'}
+    strategies = ['n', 'ol', 'os', 'om','or','oo','0n']
+    path2results = 'C:\\Users\\Loic\\Documents\\RDOSC\\Executions\\NOMAD\\2017-08-01_test_2.3_results'
+
+    # On itere sur tous les boucles
+    for algo in algos:
+        for type in types:
+            set = HistorySet.HistorySet()
+            for strategy in strategies:
+                for instance in instances:
+                        foldername = path2results +'\\' + instance + '_' + type + '\\' + algo + strategy
+                        for seed in seeds:
+                            historyfile = instance + '_' + type + '_history_' + seed + '_' + algo+strategy + '.' +seed + '.txt'
+                            filename = foldername + '\\' + historyfile
+                            currentHist = NOMAD.readLog(filename)
+                            set.addHistory(currentHist)
+
+            # Setter les bons parametres pour le set
+                set.setNumberProblem(len(instances))
+                set.setNumberSeed(len(seeds))
+                set.setNumberStrat(1)
+                set.setAlgo(algo)
+                set.setProblemClass(type)
+
+                # Nettoyer et garder seulement les succès
+
+            for history in set.historyList:
+                history.clean()
+
+                # Pickling
+            with open(algo+type+'.pkl', 'wb') as output:
+                pickle.dump(set, output, pickle.HIGHEST_PROTOCOL)
+                output.close()
+            del set
+
+def test9():
+    # On veut plotter les rations
+    seeds = [str(x + 1) for x in range(10)]
+    instances = [str(x + 1) for x in range(53)]
+    types = ['SMOOTH', 'NONDIFF', 'WILD3', 'NOISY3']
+    algos = {'c': 'CS', 'g': 'GPS', 'm': 'MADS'}
+    strategies = ['n', 'ol', 'os', 'om', 'or', 'oo', '0n']
+    ratios = [0.1,0.01,0.001]
+    path2file = 'C:\\Users\\Loic\\Documents\\RDOSC\\Executions\\NOMAD\\2017-08-01_test_2.3_results\\plot_data\\'
+
+    for algo in algos:
+        for type in types:
+            for ratio in ratios:
+                fileName = path2file + algo + type
+                with open(fileName + '.pkl', "rb") as f:
+                    testSet = pickle.load(f)
+                    f.close()
+                testSet.plotData(ratio)
+                testSet.plotPerformance(ratio)
+                del testSet
+test9()

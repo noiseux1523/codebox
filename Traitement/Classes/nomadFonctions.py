@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import classes.History as History
+import History as History
 import numpy as npy
 import random
 

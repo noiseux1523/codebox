@@ -1878,13 +1878,13 @@ switch ordo
         xp = ios(xp,x,complete_history);
     case 'm'
         % Avec ordonnancement omniscient
-        xp = ioo(xp,'f_easy');
+        xp = iom(xp,x,complete_history);
     case 'o'
         % Avec ordonnancement negatif omniscient
-        xp = ion(xp,'f_easy');
+        xp = ioo(xp,'f_easy');
     case 'n'
         % Avec ordonnancement avec modèle
-        xp = iom(xp,x,complete_history);
+        xp = ion(xp,'f_easy');
 end
  
 if parallel == 0

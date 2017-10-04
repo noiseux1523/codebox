@@ -1,4 +1,4 @@
-function [fv,ifail,icount]=bb(x);
+function [fv,ifail,icount]=bb(x)
 % La fonction à optimiser.
 
 % Nom aléatoire pour un fichier
@@ -20,6 +20,7 @@ fclose(fileID);
 [ifail,fv] = system(['bb.exe ' filename]);
 icount = 1;
 fv = str2num(fv);
+delete(filename)
 end
 
 

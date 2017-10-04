@@ -1,5 +1,5 @@
 import numpy as npy
-import classes.History
+import History
 import sys
 import copy
 from numpy import ma
@@ -60,7 +60,7 @@ class HistorySet:
         return self.historyList
 
     def addHistory(self,entry):
-        if type(entry) is classes.History.History:
+        if type(entry) is History.History:
             self.historyList.append(entry)
         else:
             print('Objet non ajouté a l ensemble d histoires car pas de la classe History')
@@ -155,8 +155,9 @@ class HistorySet:
             y2[strat] = HistorySet.markerize(y[strat], 13)
 
         #Définition de la nomenclature pour les plots
-        nomenclature = {'n': 'Sans opport.', 'ol': 'Lexico', 'os': 'Succes', 'om': 'Model', 'g': 'GPS', 'm': 'MADS',
-                                0.1: '01', 0.01: '001', 0.001: '0001'}
+        nomenclature = {'n': 'Sans opport.', 'ol': 'Lexico', 'os': 'Succes', 'om': 'Modeles', 'g': 'GPS',
+                        'm': 'MADS','or':'Aleatoire','c':'CS','oo':'Omniscient','0n':'Negative-Omni.',
+                        0.1: '01', 0.01: '001', 0.001: '0001'}
         colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
         color_index = 0
 
@@ -296,7 +297,8 @@ class HistorySet:
             y2[strat] = HistorySet.markerize(y[strat], 13)
 
         # Définition de la nomenclature pour les plots
-        nomenclature = {'n': 'Sans opport.', 'ol': 'Lexico', 'os': 'Succes', 'om': 'Model', 'g': 'GPS', 'm': 'MADS',
+        nomenclature = {'n': 'Sans opport.', 'ol': 'Lexico', 'os': 'Succes', 'om': 'Modeles', 'g': 'GPS',
+                        'm': 'MADS','or':'Aleatoire','c':'CS','oo':'Omniscient','0n':'Negative-Omni.',
                         0.1: '01', 0.01: '001', 0.001: '0001'}
         colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
         color_index = 0
