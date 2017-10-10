@@ -169,7 +169,7 @@ class HistorySet:
 
         #Mettre graphe beau
         plt.ylim((0, 1.01))
-        plt.xlim((1, 3))
+        plt.xlim((1, 15))
         plt.legend(loc=4)
         plt.xlabel('Ratio de performance')
         plt.ylabel('Proportion de problème résolus')

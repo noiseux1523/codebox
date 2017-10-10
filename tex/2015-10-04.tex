@@ -18,6 +18,7 @@
 \usepackage{float}
 \usepackage{placeins}
 \usepackage{float}
+\usepackage{subcaption}
 \bibliographystyle{ieeetr}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
@@ -26,36 +27,19 @@
 \AtBeginDocument{\def\labelitemi{$\bullet$}}
 
 \author{Loïc Anthony Sarrazin-Mc Cann}
-\title{Rapport sur la comparaison de 4 stratégies d'ordonnancement dans 2 algorithmes, sur un ensemble de 53 problèmes avec 4 dérivations possibles}
+\title{Squelette d'esquisse de mémoire}
 \date{\today}
 
 \begin{document}
 \maketitle
-
-\section{Problèmes}
-L'échantillon de problèmes caractéristiques $\Pset$ utilisé est celui issu de \cite{MoWi2009}. Cet ensemble de problème a été réutilisé dans la communautée \cite{CoLed2011}, \cite{VaVi07}, ce qui justifie son utilisation comme base de problème analytique pour la comparaison d'algorithme ou de stratégies algorithmiques.\\
-L'ensemble de problème est issu initialement de 22 fonctions non linéaire des moindres carrés tirés de la collection $\mathrm{CUTEr}$ \cite{GoOrTo03}. L'indice $k_p$ pour un problème $p \in \mathcal{P}$ fait référence à la fonction de base issue de $\mathrm{CUTEr}$ utilisée pour ce problème.\\
-Chaque problème possède trois autres paramètres en plus de leur $k_p$ correspondant, soient $n_p$ pour la dimension du problème, $m_p$ de nombre de composantes du problème et le paramètre binaire $x_p$, pour lequel, si activé, le point de départ $x_s$ subit une homotéthie de facteur 10. L'ensemble $\Pset$ contient 53 problèmes avec un vecteur $ (k_p,n_p,m_p,s_p) $ unique. Aucune fonction sous-jacente n'est surreprésentée puisque au plus six problèmes possèdent le même $x_p$. Les bornes sur les paramètres vont telles que 
-\begin{equation*}
-1 \leq x_p \leq 22,\ \ 2 \leq n_p \leq 12,\ \ 2\leq m_p\leq 65,\ \ s_p \in \{0,1\},\ \ p=1,\dots,53
-\end{equation*}
-avec $n_p \leq m_p$.\\
-La structure par morceaux des problèmes de $\Pset$ permet de dériver l'ensemble en d'autres classes de problèmes. On entend ainsi permettre la comparaison d'algorithmes ou de stratégies algorithmiques sur différentes classes de problèmes. Les classes utilisées dans \cite{MoWi2009} qui sont réutilisées ici sont : les problèmes lisses, les problèmes lisses définis par partie et les problèmes bruités. Les problèmes lisses sont formés tels que : 
-\begin{gather*}
-	f(x)=\sum_{i=1}^{m}{\left(f_i(x)\right)}^2
-\end{gather*}
-Les problèmes bruités sont obtenus en ajoutant un terme induisant un bruit à la fonction , tel que : 
-\begin{gather*}
-	f(x)=(1+\epsilon_{f}\theta(x))\sum_{k=1}^{m}{f_{i}(x)^{2}}
-\end{gather*}
-Le terme $theta(x)$ est issu d'une composition d'une fonction trigonométrique $\theta_0(x)$ avec un polynôme de Chebyshev de degré 3 tel que $T_{3}(\alpha) = \alpha(4\alpha^{2}-3)$
- \begin{gather*}
- 	\theta_0(x)=0.9\sin(100||x||_{1})\cos(100||x||_\infty)+0.1\cos(||x||_2) \\
-	\theta(x) = T_3(\theta_0(x)) = T_{3}(0.9\sin(100||x||_{1})\cos(100||x||_\infty)+0.1\cos(||x||_2))
-\end{gather*} 
- Cette composition élimine la périodicité de $\theta_{0}$ et ainsi que du terme $e_f$, le bruit relatif.  
-\section{Outils mathématiques}
-\subsection{Modèles Quadratriques pour l'ordonnancement}
+\section{Intro}
+Ce document contient le squelette d'un esquisse de mémoire. Au moment présent, les executions se limitent aux algorithmes CS, GPS, MADS. Quelques aspects connexes ont aussi étés définis de façon préliminaire.
+\section{Bases mathématiques}
+	\subsection{Optimisation sans-dérivées}
+	La DFO est une discipline de l'optimisation qui s'attardent à des fonctions $f(x)$ dont $\nabla f(x)$ ne sont pas connues ou fiables. Les déscendants direct de la méthode proposée par Hooke and Jeeves(citer), soit l'algorithme de \textit{PS} sont nommées méthodes de recherche direct. Elles ont en commun de ne pas développer une approximation du gradient selon \cite{KoLeTo03a}. Les méthodes de recherche directe sont préférablement appliquables pour des fonctions dont les dérivés ne sont pas disponible, pour des systèmes complexes ou dans lesquels l'acquisition des dérivés sont lourdes, pour des fonctions bruités numériquement ou encore des fonctions pour lesquelles la notion de dérivée est innaplicable. Les méthodes de recheche directe sont lentes à converger, mais ne sont pas nécessairement plus lentes pour les problèmes de types énumérés précédemment que des méthodes classiques, telle que la méthode de quasi-Newton (???)
+	\subsection{Gestion des contraintes en DFO}
+	Parler de barriere extreme et barriere progressive, pourrait être utile lorsqu'on va traiter de la gestion des contrainte.
+	\subsection{Modèles Quadratriques pour l'ordonnancement}
 L'ordonnancement guidé par les modèles qui utilise les modèles quadratiques élaborés dans \cite{CoLed2011} est possible avec les algorithmes présent dans NOMAD, tels que CS, GPS et MADS. Pour obtenir un modèle, on considère la base naturelle de l'espace des polynômes de degré deux et moins. 
 \begin{equation*}
 \phi (x)=(\phi_0(x),\phi_1(x),...,\phi_q(x)) = \left(1,x_1,x_2,...,x_n,\frac{x_1^2}{2},\frac{x_2^2}{2},...,\frac{x_n^2}{2},x_1 x_2, x_1 x_3,...,x_{n-1},x_{n}\right)^T
@@ -83,7 +67,6 @@ Dans le cas où $p<q$, on minimisera le même problême mais en régularisant le
 \begin{equation*}
 	\norm{A}_F = \sqrt{\overset{m}{\underset{i=1}{\sum}} \overset{n}{\underset{j=1}{\sum}}|a_{i,j}|}
 \end{equation*}
-Depuis \cite{GoVL1996}.
 Il est possible de réarranger $\tilde{f}(x)$ de façon à l'illustrer comme une fonction quadratique en utilisant la notation précédente mais en divisant le modèle en ses expressions linéaires et quadratiques : 
 \begin{equation*}
 \tilde{f}(x) = \alpha_{L}^{T}\phi_L(x) + \alpha_{Q}^{T}\phi_Q(x)
@@ -98,13 +81,26 @@ Avec $g \in \R^n$ et la matrice $H\in \R^{n,n}$ la matrice Hessienne symétrique
 	&\text{sujet à} & &c + g^T y^i + \frac{1}{2} (y^i)^T H (y^i) = f(y^i) & &i = 1,\dots, p
 \end{align*}
 On entend ici minimiser l'influence des termes quadratiques pour diminuer l'amplitude du modèle entre les points de $Y$ utilisés. Par exemple, pour un problème de dimension $n$ avec $p\leq(n+1)$, on résoudera seulement la portion linéaire de $\alpha ^T \phi(y^i) = f(y^i)$ pour ainsi laisser $h_{i,j}=0, i,j=1\dots n$ et donc $\alpha_{Q}=0$.
+
+\section{Algorithmes}
+	\subsection{CS}
+	petite histoire, description et bloc algorithme
+	\subsection{GPS}
+	petite histoire, description et bloc algorithme
+	\subsection{MADS}
+	petite histoire, description et bloc algorithme
+	\subsection{GSS}
+	DATE DE MON PREMIER RÉSUMÉ SUR GSS, TRÈS TRÈS PRÉCAIRE, À MODIFIER\\
+	La famille de méthode proposée est nommée \textit{GSS} pour \textit{Generative Set Search}. Elle est nommée ainsi parce que la principale distinction avec la recherche par coordonnées est l'introduction d'un ensemble générateur comme ensemble de direction de recherche, venant remplacer l'ensemble des directions coordonnées. Un ensemble générateur est un ensemble $G$ pour lequel n'importe quel vecteur dans $\R^n$ peut être décrit comme une combinaison linéaire à coefficient positif de vecteurs dans $G$. Un exemple d'ensemble générateur est l'ensemble des directions coordonnées. Toutefois, un ensemble générateur peut aussi contenir seulement $n+1$ directions. En plus de l'ensemble générateur, l'algorithme ajoute un ensemble de directions $H$ qui sont ajoutables par l'utilisateur selon les specificités du problème, par exemple la nécéssité d'optimisation globale.\\
+	Un deuxième différence avec la recherche par coordonnées est l'introduction de paramètres d'expansion et de contraction du pas $\delta_k$ qui peuvent varier selon l'itération. Enfin, on étends aussi la définition d'itération fructueuse, en apportant la notion de diminution minimale. Il s'agit ici d'obtenir une diminution de $f(x)$ dépassant une certaine valeur $\rho(\delta_k)$, qui dépends du pas courant de l'itération.\\
+	\subsection{Implicit Filtering}
+	petite histoire, description et bloc algorithme
 \section{Stratégies}
-Les deux algorithmes utilisés sont GPS et MADS. Les définitions des stratégies ainsi que quelques notions les entourant :
-\subsection{Stratégie Opportuniste}
+	\subsection{Stratégie Opportuniste}
 \textbf{La stratégie opportuniste} : À l'itéré courant $x^{k}$ de la sonde, pour un point $p_i$ appartenant à un ensemble de points candidats $P^k$, si $f(p_i)\ < \ f(x^k)$, alors $x^{k+t}\ \leftarrow \ p_i$ sans que les autres points de l'ensemble ordonné de points candidats $P^k$ soient évalués. L'absence d'opportunisme implique que $f(p_i)$ doit être évaluée pour chaque $p_i \ \in \ P^k$. 
-\subsection{Ordonnancement}
+	\subsection{Ordonnancement}
 \textbf{Ordonnnancement} : Pour chaque itéré $x^k$, un ensemble de points candidats $P^k$ est généré en fonction des spécificités de l'algorithme et des paramètres de l'utilisateur. Lorsqu'on réfère à l'ordonnancement, on réfère à l'ordre dans lequel ces points sont évalués dans une itération de l'étape de sonde. 
-\subsection{Stratégies d'ordonnancement}
+	\subsection{Stratégies d'ordonnancement}
 \textbf{Stratégie d'ordonnancement} : L'ordonancement des points de $P^k$ est sujette à variation. On identifie ici quelques méthodes d'ordonnancement qui permettent de comparer les points les uns avec les autres et de les classer en conséquence. On dit que $p_i \prec p_j$ si $p_i$ doit être évalué avant $p_j$. Cette dominance est définie par la stratégie d'ordonnancement utilisée. Il n'y a aucun besoin pour une stratégie d'ordonnancement si on n'utilise pas la stratégie opportuniste puisque tous les points de l'ensemble $P^k$ seront évalués avant de définir le prochain itéré $x^k$. \\\\
 
 \indent \textbf{Ordonnancement lexicographique} : L'ordonnancement lexicographique est une stratégie d'ordonnancement déterministe qui consiste à classer les points selon leurs coordonnées. Un point $p_i(x_{i,1},x_{i,2}...x_{i,n}) \ \prec \ p_j(x_{j,1},x_{j,2}...x_{j,n})$ si $x_{i,1}\ <\ x_{j,1}$. Dans le cas où $x_{i,1}\ =\ x_{j,1}$, alors c'est le test $x_{i,2}\ <\ x_{j,2}$ qui déterminera quel point est dominant. Si il y a encore égalité, ce sera la troisième coordonnée et ainsi de suite. La stratégie se nomme ainsi car elle immite l'ordonnancement des mots dans un dictionnaire.\\\\
@@ -122,60 +118,477 @@ Dans le cas ou aucun point n'améliore l'itéré courant et que un nouvel ensemb
 \end{equation}
 Dans le cas ou aucun modèle n'est disponible, par exemple à l'itération $k=0$, on utilise une stratégie d'ordonnancement déterministe.
 \section{Outils de comparaison}
-Les outils de comparaison utilisés sont les profils de performance et les profils de données.
-\\\\
-\textbf{Test de convergence} : Le test de convergence utilisé pour les profils de performance est le suivant : 
+DATENT DE MES PREMIERS RÉSUMÉS SUR LES OUTILS DE COMPARAISON, TRES PRÉCAIRE\\
+On a initialement qualifier la performance d'un solveur avec le nombre d'évaluations nécessaire pour satisfaire un test de convergence, tel que le suivant (marazzi et nocedal) : 
+
 \begin{equation}
 f(x_0) - f(x) \geq (1-\tau)(f(x_0)-f_L)\\
 \end{equation} 
-Avec $x_0$ la solution initiale, $\tau$ le taux de convergence désiré et $f_L$ la meilleure valeur obtenue pour le problème par toutes les stratégies.\\
-Les valeurs de 0.1, 0.01 et 0.001 sont utilisées pour les différents profils.\clearpage
-\section{Comparaison}
-\subsection{GPS}
 
-	\begin{figure}[h]
-	\includegraphics[width=3in]{perf2_g_01.png}
-	\includegraphics[width=3in]{perf2_g_001.png}
-	\end{figure}
-	\begin{figure}[h]
-		\includegraphics[width=3in]{perf2_g_0001.png}
-		\centering
-	\end{figure}
-\FloatBarrier
-Les profils de performance révèlent qu'il n'y a pas de hierarchie claire entre les trois stratégies utilisées avec l'opportunisme. Cependant, on y observe tout de même que la stratégie utilisant les modèles semble mieux performer sur l'éventail de problème ici présent. Le seul aspect à retenir est que l'absence de stratégie opportuniste n'est pas recommendée pour ces trois problèmes. 
-	\begin{figure}[h]
-	\includegraphics[width=3in]{data2_g_01.png}
-	\includegraphics[width=3in]{data2_g_001.png}\\
-	\end{figure}
-	\begin{figure}[h]
-		\includegraphics[width=3in]{data2_g_0001.png}
-		\centering
-	\end{figure}
-\FloatBarrier
-	On peut déduire de ces profils de données que l'absence de stratégie opportuniste ralenti un peu la résolution des problèmes. Autrement, aucune stratégie ne se démarque.
-	\newpage
-\subsection{MADS}
-	\begin{figure}[h]
-	\includegraphics[width=3in]{perf2_m_01.png}
-	\includegraphics[width=3in]{perf2_m_001.png}
-\end{figure}
-\begin{figure}[h]
-	\includegraphics[width=3in]{perf2_m_0001.png}
-	\centering
-\end{figure}
-\FloatBarrier
-Avec MADS, on remarque une hierarchie plus flagrante entre la performance des stratégie sur ces problèmes. Puisque la stratégie d'ordonnancement avec la dernière direction de succès est moins performante que la stratégie lexicographique, on peut se demander si il est pertinent de l'utiliser en accord avec MADS. De plus, on remarque que la stratégie d'ordonnancement avec modèles semble plus fiable.
-\begin{figure}[h]
-	\includegraphics[width=3in]{data2_m_01.png}
-	\includegraphics[width=3in]{data2_m_001.png}\\
-\end{figure}
-\begin{figure}[h]
-	\includegraphics[width=3in]{data2_m_0001.png}
-	\centering
-\end{figure}
-\FloatBarrier
-Les profils de données ne sont pas très révélateurs. Ceci est en partie du au nombre d'evaluation maximal des boîtes noires, qui reste fixé à 100 indépendemment de la dimension du problème. 
+Avec $x_0$ le point initial, $x$ le point courant, $f$ la fonction à optimizer, $\tau>0$ un seuil de tolérance et $f_L$ la meilleure solution courante trouvée par un solveur sur ce problème. Ce test de convergence perd de sa validité lorsqu'on implique que le calcul de la fonction demande beaucoup de ressources puisqu'il est possible que le test ne soit jamais réussi si on observe la résolution avec de budget d'évaluation fixe. \\ 
+\subsection{Profil de performance}
+Un outil déjà établi pour la comparaison de solveurs, pas nécessairement des solveurs d'optimization sans-dérivées, est le profil de performance (citer Dolan et Moré). La performance d'un profil est donné par une mesure $t_{p,s}$, qui peut être par exemple le nombre d'évaluations nécessaire pour satisfaire le test de convergence énoncé plus haut, pour une paire $p$ un problème, et $s$ un solveur. Afin de comparer les solveurs sur chaque problème, on défini le ratio de comparaison suivant
+\begin{equation}
+r_{p,s}=\frac{t_{p,s}}{min\{t_{p,s} : s\  \epsilon \  S\}}\\
+\end{equation}
+On peut alors définir le profil de performance d'un solveur sur un ensemble de problème $P$ ainsi
+\begin{equation}
+\rho_s(\alpha)=\frac{1}{|P|)}\text{size}\{p\ \epsilon \ P : r_{p,s} \leq \alpha \}\\
+\end{equation}
+Ainsi, pour un $alpha$, soit un indice de performance tel que le ratio de comparaison,  donné, on peut savoir la proportion de problème chaque solveur a su résoudre en se rapprochant à un facteur de $(1-\tau)$ de la meilleure solution trouvée par l'ensemble des solveurs pour chaque problème. \\
+Le test de convergence varie selon la nature des problèmes à résoudre. On peut utiliser un profil de performance pour des outils d'optimization avec dérivés avec un test de convergence qui agit sur les informations de premier ordre de la fonction. Pour les algorithmes d'optimization sans dérivées, on utilise le test énoncé plus haut avec $f_L$ étant la plus petite valeur obtenue dans l'ensemble $S$, de façon à permettre qu'au moins cha
+\subsection{Profil de données}
+Le principal défaut des profils de performances est l'inaptitude à déceler l'efficacité pour des budgets d'évaluation fixes. Les auteurs proposent alors une définition d'un profil de donnée, pour lequel il sera possible d'utiliser un budget d'évaluations dans le calcul de l'indice de performance 
+\begin{equation}
+d_s(\alpha)=\frac{1}{|P|)}\text{size}\{p\ \epsilon \ P : \frac{t_{p,s}}{n_p+1} \leq \alpha \}\\
+\end{equation}
+avec $t_p$ le nombre d'évaluations pour atteindre la convergence nécessité par le solveur $s$ sur le problème $p$. Le facteur $n_p+1$ est le nombre d'évaluations nécessaire pour estimé un gradient pour un problème de taille $n_p$. Il est alors possible de mesurer la performance relative des solveurs comme une fonction du budget d'évaluations. 
+\begin{equation}
+r_{p,s}=\frac{t_{p,s}}{min\{t_{p,s} : s\  \epsilon \  S\}}\\
+\end{equation}
 
+On peut alors définir le profil de performance d'un solveur sur un ensemble de problème $P$ ainsi
+\begin{equation}
+\rho_s(\alpha)=\frac{1}{|P|)}\text{size}\{p\ \epsilon \ P : r_{p,s} \leq \alpha \}\\
+\end{equation}
+Ainsi, pour un $alpha$, soit un indice de performance tel que le ratio de comparaison,  donné, on peut savoir la proportion de problème chaque solveur a su résoudre en se rapprochant à un facteur de $(1-\tau)$ de la meilleure solution trouvée par l'ensemble des solveurs pour chaque problème. \\
+Le test de convergence varie selon la nature des problèmes à résoudre. On peut utiliser un profil de performance pour des outils d'optimization avec dérivés avec un test de convergence qui agit sur les informations de premier ordre de la fonction. Pour les algorithmes d'optimization sans dérivées, on utilise le test énoncé plus haut avec $f_L$ étant la plus petite valeur obtenue dans l'ensemble $S$, de façon à permettre qu'au moins chaque problème $p \ \epsilon \ P$ ait un solveur $s \ \epsilon \ S$ pour lequel $r_{p,s}=1$.\\
+
+
+\section{Problèmes}
+\subsection{Moré-Wild}
+L'échantillon de problèmes caractéristiques $\Pset$ utilisé est celui issu de \cite{MoWi2009}. Cet ensemble de problème a été réutilisé dans la communautée \cite{CoLed2011}, \cite{VaVi07}, ce qui justifie son utilisation comme base de problème analytique pour la comparaison d'algorithme ou de stratégies algorithmiques.\\
+L'ensemble de problème est issu initialement de 22 fonctions non linéaire des moindres carrés tirés de la collection $\mathrm{CUTEr}$ \cite{GoOrTo03}. L'indice $k_p$ pour un problème $p \in \mathcal{P}$ fait référence à la fonction de base issue de $\mathrm{CUTEr}$ utilisée pour ce problème.\\
+Chaque problème possède trois autres paramètres en plus de leur $k_p$ correspondant, soient $n_p$ pour la dimension du problème, $m_p$ de nombre de composantes du problème et le paramètre binaire $x_p$, pour lequel, si activé, le point de départ $x_s$ subit une homotéthie de facteur 10. L'ensemble $\Pset$ contient 53 problèmes avec un vecteur $ (k_p,n_p,m_p,s_p) $ unique. Aucune fonction sous-jacente n'est surreprésentée puisque au plus six problèmes possèdent le même $k_p$. Les bornes sur les paramètres vont telles que 
+\begin{equation*}
+1 \leq x_p \leq 22,\ \ 2 \leq n_p \leq 12,\ \ 2\leq m_p\leq 65,\ \ s_p \in \{0,1\},\ \ p=1,\dots,53
+\end{equation*}
+avec $n_p \leq m_p$.\\
+La structure par morceaux des problèmes de $\Pset$ permet de dériver l'ensemble en d'autres classes de problèmes. On entend ainsi permettre la comparaison d'algorithmes ou de stratégies algorithmiques sur différentes classes de problèmes. Les classes utilisées dans \cite{MoWi2009} qui sont réutilisées ici sont : les problèmes lisses, les problèmes lisses définis par partie et les problèmes bruités. Les problèmes lisses sont formés tels que : 
+\begin{gather*}
+f(x)=\sum_{i=1}^{m}{\left(f_i(x)\right)}^2
+\end{gather*}
+\textbf{Les problèmes non-différentiables} sont obtenus ... : 
+
+\textbf{Les problèmes bruités} sont obtenus en ajoutant un terme induisant un bruit à la fonction , tel que : 
+\begin{gather*}
+f(x)=(1+\epsilon_{f}\theta(x))\sum_{k=1}^{m}{f_{i}(x)^{2}}
+\end{gather*}
+Le terme $theta(x)$ est issu d'une composition d'une fonction trigonométrique $\theta_0(x)$ avec un polynôme de Chebyshev de degré 3 tel que $T_{3}(\alpha) = \alpha(4\alpha^{2}-3)$
+\begin{gather*}
+\theta_0(x)=0.9\sin(100||x||_{1})\cos(100||x||_\infty)+0.1\cos(||x||_2) \\
+\theta(x) = T_3(\theta_0(x)) = T_{3}(0.9\sin(100||x||_{1})\cos(100||x||_\infty)+0.1\cos(||x||_2))
+\end{gather*} 
+Cette composition élimine la périodicité de $\theta_{0}$ et ainsi que du terme $e_f$, le bruit relatif.  \\
+\textbf{Les problèmes sauvages} sont ...: IL N'Y A AUCUNE MENTION À CE TYPE DE PROBLÈME DANS LA DOCUMENTATION... À EXCLURE??? juste dans le code...à vérifier
+\subsection{Boite noires}
+\section{Methodologie}
+	\subsection{Méthodologie commune}
+	Les valeurs de 0.1, 0.01 et 0.001 sont utilisées pour les différents profils lors des résolutions des problèmes de Moré-Wild\clearpage
+	\subsection{CS}
+	CS a été obtenu a l'aide d'un tel paramètrage de NOMAD...
+	\subsection{GPS}
+	GPS a été obtenu a l'aide d'un tel paramètrage de NOMAD...
+	\subsection{MADS}
+	Dans le but d'oberserver en premier lieu les impacts des différentes stratégies sur le coeur de MADS on désactive les options suivantes, de façon à isoler la sonde
+	\subsection{MADS par défaut de NOMAD}
+	Réactivons les paramètres par défaut de nomad pour voir l'impact de l'ordonnancement sur le logiciel sans égard à l'isolement de la sonde.
+	\subsection{GSS}
+	\subsection{Implicit Filtering}
+	\clearpage
+\section{Comparaison des stratégies}
+	\subsection{CS}
+		\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_SMOOTH_01.png}
+				%\caption{First subfigure} \label{fig:a}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_SMOOTH_001.png}
+				%\caption{Second subfigure} \label{fig:b}
+			\end{subfigure}
+			\medskip
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_SMOOTH_0001.png}
+				%\caption{Third subfigure} \label{fig:c}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_SMOOTH_01.png}
+				%\caption{Fourth subfigure} \label{fig:d}
+			\end{subfigure}
+			\medskip
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_SMOOTH_001.png}
+				%\caption{Third subfigure} \label{fig:e}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_SMOOTH_0001.png}
+				%\caption{Fourth subfigure} \label{fig:f}
+			\end{subfigure}
+			\caption{Comparaison sur Moré-Wild, problèmes lisses avec C.S.} \label{fig:1}
+		\end{figure}
+		\clearpage
+		La recherche par coordonnée offre une opportunitée sans pareil d'observer l'impact de l'ordonnancement. Puisqu'il s'agit essentiellement d'une étape de sonde rudimentaire, elle sera très sensible à l'ordonnancement et à la stratégie qui le guidera. On s'attends ici à des profils très distincs et sans surprises. Sur les problèmes lisses, les algorithmes se comportent de façon plus stable. On en déduit qu'il ne sera pas pertinent de qualifier une stratégie d'ordonnancement spécialement sur son comportement en situation d'optimisation de problème lisse; les déductions dans cette section seron plutôt de nature générale. \\
+		Outre de rappeler la pertinence des profils de données, les profils de performances montrent que la stratégie aléatoire et la stratégie d'ordonnancement par modèles sont de performances comparables. On peut y comprendre ici que les stratégies sont uniquement comparées à la stratégie omnisciente pour la tolérance la plus haute $\tau = 0.1$. La marge d'erreur est aussi limitée pour les autres valeurs de $\tau = 0.01$ et $\tau = 0.001$, alors que pour près de $95\%$ on utilise la stratégie omnisciente pour comparer le résultat. Dans cette situation, on peut prendre directement l'allure du profil pour hierarchiser les stratégies sur l'ensemble de problème sans se soucier de l'erreur induite par la nature des profils de performance \cite{GoSc2016}. Sur le profil de performance avec $\tau = 0.1$, on voit que la stratégie d'ordonnancement en fonction du dernier succès est supérieure à la stratégie aléatoire jusqu'à un ratio de performance avoisinant $2$, après coup elle est reléguée à la quatrième plus performante. Malgré que cette stratégie soit plus raffinée que la stratégie aléatoire, elle ne prendra avantage de la forme du problème que si celui-ci n'est pas composé de plusieurs minimums locaux et de points de selle. On pourrait conclure que l'ensemble de problème utilisé ici possède une proportion de problèmes dont la structure n'est pas idéale pour un ordonnancement basé uniquement sur le succès précédent. La stratégie lexicographique n'est pas comparable en terme de performance. La stratégie pousse l'algorithme à épuiser ses sources de directions de déscente une par une. Au fil des évaluations, les directions de déscente déjà épuisée seront évaluées en début de sonde, et celles prometteuses seront toujours à la fin de la liste, ce qui aura pour effet de décaler les succès de plus en plus au cours du déroulement de l'algorithme. Pour sa part, la sonde complète ne peut pas compétitionner en observant le profil de performance, puisqu'elle prends un nombre $n$ fois le nombre d'évaluation nécéssité par la stratégie omnisciente. La stratégie négative omnisciente n'est pas appropriée dans la comparaison avec un profil de performance. Ces tendances sont observables aussi pour les ratios de tolérance moins élevés, qui figurent dans le deuxième et le troisième profil de performance. On en conclu que les solutions trouvées avec toutes les méthodes sont soit exacte à $0.01\%$ ou alors à plus de $10\%$ de différence de celle déterminée avec la stratégie omnisciente.  \\
+		Dans le cas des tests avec cette famille d'algorithme, l'utilisation de la stratégie omnisciente requiert le traçage de profils de données pour bien pouvoir comparer les stratégies.  Ce type de métrique est choisi plutôt que les profils de performance car la nature de leur abscisse est relative au nombre d'itérations avant d'atteindre le minimum, permettant ainsi de juger de la performance d'un algorithme indépendemment de ses concurrents. De plus, les profils de données permettent de mieux distinguer le meilleur performant sans qu'il soit joint aux axes, tel qu'illustré dans les trois profils de performances de la figure précédente. Nous savons d'ailleurs des profils de performance que la stratégie omnisciente donne toujours le meilleur rendement. Ainsi, on peut se fier directement à l'apparence des courbes. Premièrement, la stratégie omnisciente semble toujours la meilleure. On explique que son ordonnée n'atteint pas $1.0$ par le fait que seulement jusqu'à $70$ nombre de simplex gradients sont illustrés. Pour des problèmes ayant jusqu'à $n=12$ variables tels qu'il en existe dans la collection de Moré-Wild utilisée, on a que $70$ gradients simplex correspondent à $910$ évaluations de la boîte noire, qui peuvent ne pas être suffisantes pour l'obtention de la meilleure solution obtenue. On observe que les comparaisons des stratégies réalistes faitent avec les profils de performance ne sont pas remis en question avec les profils de données outre la stratégie omnisciente.
+		\clearpage
+		\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_NONDIFF_01.png}
+				%\caption{First subfigure} \label{fig:a}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_NONDIFF_001.png}
+				%\caption{Second subfigure} \label{fig:b}
+			\end{subfigure}
+			\medskip
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_NONDIFF_0001.png}
+				%\caption{Third subfigure} \label{fig:c}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_NONDIFF_01.png}
+				%\caption{Fourth subfigure} \label{fig:d}
+			\end{subfigure}
+			\medskip
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_NONDIFF_001.png}
+				%\caption{Third subfigure} \label{fig:e}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_NONDIFF_0001.png}
+				%\caption{Fourth subfigure} \label{fig:f}
+			\end{subfigure}
+			\caption{Comparaison sur Moré-Wild, problèmes non-différentiables avec C.S.} \label{fig:2}
+		\end{figure}
+		\clearpage
+		Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires  
+		\clearpage
+		\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_NOISY3_01.png}
+				%\caption{First subfigure} \label{fig:a}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_NOISY3_001.png}
+				%\caption{Second subfigure} \label{fig:b}
+			\end{subfigure}
+			\medskip
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_NOISY3_0001.png}
+				%\caption{Third subfigure} \label{fig:c}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_NOISY3_01.png}
+				%\caption{Fourth subfigure} \label{fig:d}
+			\end{subfigure}
+			\medskip
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_NOISY3_001.png}
+				%\caption{Third subfigure} \label{fig:e}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_NOISY3_0001.png}
+				%\caption{Fourth subfigure} \label{fig:f}
+			\end{subfigure}
+			\caption{Comparaison sur Moré-Wild, problèmes bruités avec C.S.} \label{fig:3}
+		\end{figure}
+		\clearpage
+		comments
+		\clearpage
+				\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_WILD3_01.png}
+				%\caption{First subfigure} \label{fig:a}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_WILD3_001.png}
+				%\caption{Second subfigure} \label{fig:b}
+			\end{subfigure}
+			\medskip
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{perf_c_WILD3_0001.png}
+				%\caption{Third subfigure} \label{fig:c}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_WILD3_01.png}
+				%\caption{Fourth subfigure} \label{fig:d}
+			\end{subfigure}
+			\medskip
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_WILD3_001.png}
+				%\caption{Third subfigure} \label{fig:e}
+			\end{subfigure}\hspace*{\fill}
+			\begin{subfigure}{0.48\textwidth}
+				\includegraphics[width=\linewidth]{data_c_WILD3_0001.png}
+				%\caption{Fourth subfigure} \label{fig:f}
+			\end{subfigure}
+			\caption{Comparaison sur Moré-Wild, problèmes sauvages avec C.S.} \label{fig:4}
+		\end{figure}
+		\clearpage
+	\subsection{GPS}
+		\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_SMOOTH_01.png}
+		%\caption{First subfigure} \label{fig:a}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_SMOOTH_001.png}
+		%\caption{Second subfigure} \label{fig:b}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_SMOOTH_0001.png}
+		%\caption{Third subfigure} \label{fig:c}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_SMOOTH_01.png}
+		%\caption{Fourth subfigure} \label{fig:d}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_SMOOTH_001.png}
+		%\caption{Third subfigure} \label{fig:e}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_SMOOTH_0001.png}
+		%\caption{Fourth subfigure} \label{fig:f}
+	\end{subfigure}
+	\caption{Comparaison sur Moré-Wild, problèmes lisses avec G.P.S.} \label{fig:5}
+\end{figure}
+\clearpage
+comments
+\clearpage
+\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_NONDIFF_01.png}
+		%\caption{First subfigure} \label{fig:a}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_NONDIFF_001.png}
+		%\caption{Second subfigure} \label{fig:b}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_NONDIFF_0001.png}
+		%\caption{Third subfigure} \label{fig:c}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_NONDIFF_01.png}
+		%\caption{Fourth subfigure} \label{fig:d}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_NONDIFF_001.png}
+		%\caption{Third subfigure} \label{fig:e}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_NONDIFF_0001.png}
+		%\caption{Fourth subfigure} \label{fig:f}
+	\end{subfigure}
+	\caption{Comparaison sur Moré-Wild, problèmes non-différentiables avec G.P.S.} \label{fig:6}
+\end{figure}
+\clearpage
+Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires Commentaires  
+\clearpage
+\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_NOISY3_01.png}
+		%\caption{First subfigure} \label{fig:a}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_NOISY3_001.png}
+		%\caption{Second subfigure} \label{fig:b}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_NOISY3_0001.png}
+		%\caption{Third subfigure} \label{fig:c}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_NOISY3_01.png}
+		%\caption{Fourth subfigure} \label{fig:d}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_NOISY3_001.png}
+		%\caption{Third subfigure} \label{fig:e}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_NOISY3_0001.png}
+		%\caption{Fourth subfigure} \label{fig:f}
+	\end{subfigure}
+	\caption{Comparaison sur Moré-Wild, problèmes bruités avec G.P.S.} \label{fig:7}
+\end{figure}
+\clearpage
+comments
+\clearpage
+\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_WILD3_01.png}
+		%\caption{First subfigure} \label{fig:a}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_WILD3_001.png}
+		%\caption{Second subfigure} \label{fig:b}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_g_WILD3_0001.png}
+		%\caption{Third subfigure} \label{fig:c}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_WILD3_01.png}
+		%\caption{Fourth subfigure} \label{fig:d}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_WILD3_001.png}
+		%\caption{Third subfigure} \label{fig:e}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_g_WILD3_0001.png}
+		%\caption{Fourth subfigure} \label{fig:f}
+	\end{subfigure}
+	\caption{Comparaison sur Moré-Wild, problèmes sauvages avec G.P.S.} \label{fig:8}
+\end{figure}
+\clearpage
+	\subsection{MADS}
+		\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_SMOOTH_01.png}
+		%\caption{First subfigure} \label{fig:a}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_SMOOTH_001.png}
+		%\caption{Second subfigure} \label{fig:b}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_SMOOTH_0001.png}
+		%\caption{Third subfigure} \label{fig:c}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_SMOOTH_01.png}
+		%\caption{Fourth subfigure} \label{fig:d}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_SMOOTH_001.png}
+		%\caption{Third subfigure} \label{fig:e}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_SMOOTH_0001.png}
+		%\caption{Fourth subfigure} \label{fig:f}
+	\end{subfigure}
+	\caption{Comparaison sur Moré-Wild, problèmes lisses avec MADS} \label{fig:9}
+\end{figure}
+\clearpage
+On voit rien il faudrait changer le scale des graphiques longueur des axes
+\clearpage
+\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_NONDIFF_01.png}
+		%\caption{First subfigure} \label{fig:a}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_NONDIFF_001.png}
+		%\caption{Second subfigure} \label{fig:b}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_NONDIFF_0001.png}
+		%\caption{Third subfigure} \label{fig:c}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_NONDIFF_01.png}
+		%\caption{Fourth subfigure} \label{fig:d}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_NONDIFF_001.png}
+		%\caption{Third subfigure} \label{fig:e}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_NONDIFF_0001.png}
+		%\caption{Fourth subfigure} \label{fig:f}
+	\end{subfigure}
+	\caption{Comparaison sur Moré-Wild, problèmes non-différentiables avec MADS} \label{fig:10}
+\end{figure}
+\clearpage
+On voit rien il faudrait changer le scale des graphiques longueur des axes 
+\clearpage
+\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_NOISY3_01.png}
+		%\caption{First subfigure} \label{fig:a}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_NOISY3_001.png}
+		%\caption{Second subfigure} \label{fig:b}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_NOISY3_0001.png}
+		%\caption{Third subfigure} \label{fig:c}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_NOISY3_01.png}
+		%\caption{Fourth subfigure} \label{fig:d}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_NOISY3_001.png}
+		%\caption{Third subfigure} \label{fig:e}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_NOISY3_0001.png}
+		%\caption{Fourth subfigure} \label{fig:f}
+	\end{subfigure}
+	\caption{Comparaison sur Moré-Wild, problèmes bruités avec MADS} \label{fig:11}
+\end{figure}
+\clearpage
+On voit rien il faudrait changer le scale des graphiques longueur des axes
+\clearpage
+\begin{figure}[!htb] % "[t!]" placement specifier just for this example
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_WILD3_01.png}
+		%\caption{First subfigure} \label{fig:a}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_WILD3_001.png}
+		%\caption{Second subfigure} \label{fig:b}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{perf_m_WILD3_0001.png}
+		%\caption{Third subfigure} \label{fig:c}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_WILD3_01.png}
+		%\caption{Fourth subfigure} \label{fig:d}
+	\end{subfigure}
+	\medskip
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_WILD3_001.png}
+		%\caption{Third subfigure} \label{fig:e}
+	\end{subfigure}\hspace*{\fill}
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\linewidth]{data_m_WILD3_0001.png}
+		%\caption{Fourth subfigure} \label{fig:f}
+	\end{subfigure}
+	\caption{Comparaison sur Moré-Wild, problèmes sauvages avec MADS} \label{fig:12}
+\end{figure}
+\clearpage
+On voit rien il faudrait changer le scale des graphiques longueur des axes
+\clearpage
+\subsection{MADS de NOMAD}
+ces données existent mais restent à être tracées
+\subsection{GSS}
+à suivre
+\subsection{IMPLICIT FILTERING}
+à suivre 
+\clearpage
 \bibliographystyle{plain}
 \bibliography{bibliography}
 %\pdfbookmark[1]{References}{sec-refs}

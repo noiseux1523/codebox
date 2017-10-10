@@ -331,4 +331,25 @@ def test9():
                 testSet.plotData(ratio)
                 testSet.plotPerformance(ratio)
                 del testSet
-test9()
+
+def test10():
+    # On veut plotter les rations mais avec le bon shnit
+    seeds = [str(x + 1) for x in range(10)]
+    instances = [str(x + 1) for x in range(53)]
+    types = ['SMOOTH', 'NONDIFF', 'WILD3', 'NOISY3']
+    algos = {'c': 'CS', 'g': 'GPS', 'm': 'MADS'}
+    strategies = ['n', 'ol', 'os', 'om', 'or', 'oo', '0n']
+    ratios = [0.1,0.01,0.001]
+    path2file = 'C:\\Users\\Loic\\Documents\\RDOSC\\Executions\\NOMAD\\2017-08-01_test_2.3_results\\plot_data\\'
+
+    for algo in algos:
+        for type in types:
+            fileName = path2file + algo + type
+            with open(fileName + '.pkl', "rb") as f:
+                testSet = pickle.load(f)
+                f.close()
+            for ratio in ratios:
+                #testSet.plotData(ratio)
+                testSet.plotPerformance(ratio)
+            del testSet
+test10()
