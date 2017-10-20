@@ -1844,14 +1844,13 @@ for i=1:vsize
 end
 
 % Loic : Je crois que pold est le nombre de points qu'on peut calculer.
-pold_save = pold;
 
 global ordo
 switch ordo
     case 'r'
         % Avec ordonnancement al�atoire
         [xp1, order] = ior(xp1);
-        dx1=dx1(order);
+        dx1=dx1(:,order);
     case 'l'
         % Avec ordonnancement lexicographique
         xp1 = iol(xp1);
@@ -1889,44 +1888,28 @@ end
 % Evaluate f, in parallel if possible. Flag the failed points.
 %
 pnew=sum(newindex);
-pold_loic = sum(oldindex); % Loic : trouver combien y a de points deja evalués
 fp1=[];
 iflag=[];
 % Ordering here, loic
 
 oldcount = 0; % de loic, pour compter les vieux points entre les nouveaux
 j=1;
+cloc=fopen('x_et_h','a+');
 if parallel == 0
     for i=1:pnew
-        
-        % Loic : Ajout ca pour determiner combien de vieux on "skip".
-        j=i+oldcount;
-        if oldindex(j) == true
-            k=j;
-            while oldindex(k) == true
-                oldcount = oldcount+1;
-                k=k+1;
-            end
-        end
-        j=i+oldcount;
-        
-        
         [fpx,iflagx,ict]=feval(f,xp(:,i),h,core_data);
         fp1=[fp1,fpx];
         iflag=[iflag,iflagx];
         icount=icount+ict;
-        fp_save = fp;
+        blic=fprintf(cloc,'%d \t %d \n',i+length(complete_history.good_values),20*h);
         if fpx<current_best
-            remove_pts=pnew+pold_loic-i;
-            fp=fp(:,1:end-remove_pts+oldcount);
-            save_newindex = newindex;
-            newindex=newindex(:,1:end-remove_pts+oldcount);
-            iflago=iflago(:,1:end-remove_pts+oldcount);
-            pold=pnew-remove_pts+oldcount; %% Pas sur mais le nombre de pt evalués est egale a pold.
+            fp1 = [fp1, NaN*ones(1,(pnew-i))];
+            iflag=[iflag,true * ones(1,(pnew-i))];
             break %% LOIC ICI
         end
     end
 else
+fclose(cloc);
     if pnew > 0
         [fp1,iflag,ictrp]=feval(f,xp,h,core_data);
         icount=icount+sum(ictrp);

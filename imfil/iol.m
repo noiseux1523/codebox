@@ -1,10 +1,10 @@
-function[out]=iol(in)
+function[out,order]=iol(in)
     %This is lexicographic ordering
     [l n] = size(in); % l = longueur du vecteur point, n = quantite de vecteurs points
+    entry = in;
     %moved{1:amount}=0
     for i = 1:n-1
         for j = i+1:n % en regardant juste ceux apres je skip les permutations entre deux points déja un en avant de l'autre
-
                 %Fabriquer vecteur comparaison
                 %comp(1:l)=0;
             for k = 1 : l
@@ -24,4 +24,7 @@ function[out]=iol(in)
         end
     end
     out = in;
+    for a = 1 : size(out)
+        if 
+    end
 end
